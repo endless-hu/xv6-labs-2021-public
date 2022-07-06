@@ -1,0 +1,38 @@
+
+name: lab traps
+
+on:
+  watch:
+    types: started
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step Up Build Environment
+        run: |
+          sudo apt-get update && sudo apt-get upgrade
+          sudo apt-get install git build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu
+
+      - name: Checkout Private Source Repository
+        uses: actions/checkout@v3
+        with:
+          repository: endless-hu/xv6-labs-2021
+          token: ${{ secrets.GH_PAT }}
+          path: my_repo
+          ref: traps
+      
+      - name: Checkout Original Course Repository
+        run: git clone git://g.csail.mit.edu/xv6-labs-2021
+
+      - name: run lab traps test
+        run: |
+          cd xv6-labs-2021
+          git switch traps
+          cp $GITHUB_WORKSPACE/my_repo/*.txt .
+          rm -rf kernel/
+          mkdir kernel
+          cp $GITHUB_WORKSPACE/my_repo/kernel/* kernel/
+          make grade
+
