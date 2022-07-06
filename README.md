@@ -1,5 +1,16 @@
 # FOREWORD
 
+[![lab util](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_util.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_util.yml)
+[![lab syscall](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_syscall.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_syscall.yml)
+[![lab pgtbl](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_pgtbl.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_pgtbl.yml)
+[![lab traps](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_traps.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_traps.yml)
+[![lab cow](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_cow.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_cow.yml)
+[![lab thread](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_thread.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_thread.yml)
+[![lab net](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_net.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_net.yml)
+[![lab lock](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_lock.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_lock.yml)
+[![lab fs](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_fs.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_fs.yml)
+[![lab mmap](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_mmap.yml/badge.svg)](https://github.com/endless-hu/xv6-labs-2021-public/actions/workflows/lab_mmap.yml)
+
 This is my project report for [MIT 6.S081(Operating System), 2021 Fall](https://pdos.csail.mit.edu/6.S081/2021/schedule.html). 
 
 **PLEASE NOTE: The hyperlinks to my source code in this repo are INVALID!!! This is a __public__ version of my project. I don't open my source code because it is a course project and I believe I'm obliged to help protect academic integrity.**
