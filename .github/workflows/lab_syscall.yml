@@ -20,19 +20,10 @@ jobs:
         with:
           repository: endless-hu/xv6-labs-2021
           token: ${{ secrets.GH_PAT }}
-          path: my_repo
           ref: syscall
-      
-      - name: Checkout Original Course Repository
-        run: git clone git://g.csail.mit.edu/xv6-labs-2021
 
       - name: run lab syscall test
         run: |
-          cd xv6-labs-2021
-          git switch syscall
-          cp $GITHUB_WORKSPACE/my_repo/*.txt .
-          rm -rf kernel/
-          mkdir kernel
-          cp $GITHUB_WORKSPACE/my_repo/kernel/* kernel/
           make grade
-
+          echo The test runs on commit:
+          git log | head -10
