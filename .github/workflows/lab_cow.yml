@@ -24,6 +24,12 @@ jobs:
 
       - name: run lab cow test
         run: |
-          make grade
+          echo The Makefile hash: $(sha256sum Makefile | cut -d' ' -f1)
+          echo The usertests.c hash: $(sha256sum user/usertests.c | cut -d' ' -f1)
+          echo The cowtest.c hash: $(sha256sum user/cowtest.c | cut -d' ' -f1)
+          for i in {1..10}; do
+            make grade
+            echo "============ Test Round $i complete ==============="
+          done
           echo The test runs on commit:
-          git log | head -10
+          git log | head -100

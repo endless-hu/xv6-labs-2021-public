@@ -27,30 +27,43 @@ Some hints:
 - Some helpful macros and definitions for page table flags are at the end of `kernel/riscv.h`.
 - If a COW page fault occurs and there's no free memory, the process should be killed.
 
-## Solution
+## Solution(Updated on Aug 10th, 2022)
+
+The previous solution did not address the concurrency control problems perfectly. Because my initial plan was to allocate new pages to a COW page in the `usertrap`, which caused much headache because I should acquire the necessary lock before reading and modifying the `ref_count`, but other functions(such as `uvmunmap()`) inside the critical section also needed to acquire the same lock, which lead to lock re-acquisition.
+
+To address this problem, I introduced a global function `handle_cow(uint64 pa)`, which was responsible for allocating new pages to a COW page. Besides, I stripped unnecessary access to `ref_count` in functions such as `uvmunmap`.
 
 1. Construct a reference count `struct` to record the reference count of each page by:
 
    ```c
-   struct RefCount
-   {
-     struct spinlock lock;
-     uint8 ref_count[(PHYSTOP - KERNBASE) / PGSIZE];
-   } ref_count;
+    uint8 ref_count[(PHYSTOP - KERNBASE) / PGSIZE];
    ```
 
-2. In [`kernel/kalloc.c:kinit()`](kernel/kalloc.c), initialize `ref_count.lock` and set all `ref_count` to 0 in `kinit()`;
+   Note that we do not need an additional lock to protect it. Instead, the `kmem.lock` provided in the original code is enough. 
+
+2. <del>In [`kernel/kalloc.c:kinit()`](kernel/kalloc.c), set all `ref_count` to 0 in `kinit()`;</del> This step is unnecessary because `ref_count` is a global variable, which is initialized to 0 by default.
+   
    In `kalloc()`, after allocating a new page, increase its `ref_count`;
+
    In `kfree()`, first decrease the page's `ref_count`, then free the page if its `ref_count == 0`.
+
+   Add the no-lock version of `kalloc` and `kfree`. They will be useful in `handle_cow()`.
+
+   Add a new function `handle_cow(uint64 va)` (Remember to add its declaration in `kernel/defs.h`!). It takes the virtual address of the COW page as the parameter, finds the PTE and physical address, checks `ref_count` and performs necessary operations regarding to the page.
 
 3. In  [`kernel/vm.c:uvmcopy()`](kernel/vm.c) , map the parent's physical pages into the child, instead of allocating new pages. Clear `PTE_W` and set `PTE_RSW1` in the `PTE`s of both child and parent.
 
-4. In [`kernel/trap.c:usertrap()`](kernel/trap.c), before processing the trap, first acquire `ref_count.lock`(**THE READING AND WRITING OF `ref_count` MUST BE PROTECTED BY ITS LOCK!!!**), then:
+4. In [`kernel/trap.c:usertrap()`](kernel/trap.c), <del>before processing the trap, first acquire `ref_count.lock`(**THE READING AND WRITING OF `ref_count` MUST BE PROTECTED BY ITS LOCK!!!**), then:</del>
+   
    **4.1.** If it is a system call (`r_scause() == 8`), then release `ref_count.lock` immediately, do not modify anything;
-   **4.2.** If it is a page fault (`r_scause() == 15`), and its reference count is **greater than** 1 (which means one of its referrer want to write something to it), allocate a new duplication of it, unset the new page's `COW` bit and set the `PTE_W` bit. **REMEMBER TO CHECK WHETHER THE `va` OF THE FAULTING PAGE IS POSSIBLE!!!**
-   **4.3.** If it is a page fault (`r_scause() == 15`), and its reference count **is** 1 (which means its ONLY referrer want to write something to it), make the page write-able and unset the `COW` bit.
-   **4.4.** Otherwise it is an abnormal situation, give the warning output.
-   **4.5. AFTER EVERY PROCESSING, REMEMBER TO RELEASE `ref_count.lock`!!!**
+
+   **4.2.** If it is a page fault (`r_scause() == 15`), hand the faulting va to `handle_cow`. <del>reference count is **greater than** 1 (which means one of its referrer want to write something to it), allocate a new duplication of it, unset the new page's `COW` bit and set the `PTE_W` bit.</del> **REMEMBER TO CHECK WHETHER THE `va` OF THE FAULTING PAGE IS LEGAL!!!** For example, `va < MAXVA` should be true.
+
+   <del>**4.3.** If it is a page fault (`r_scause() == 15`), and its reference count **is** 1 (which means its ONLY referrer want to write something to it), make the page write-able and unset the `COW` bit.</del>
+
+   <del>**4.4.** Otherwise it is an abnormal situation, give the warning output.</del>
+
+   <del>**4.5. AFTER EVERY PROCESSING, REMEMBER TO RELEASE `ref_count.lock`!!!**</del>
 
 5. In [`kernel/vm.c:copyout()`](kernel/vm.c), use the same mechanism above.
 
@@ -66,7 +79,7 @@ Some hints:
 
 ### Remaining Bugs [None]
 
-**Update on 01/12/2021: ALL BUGS ARE FIXED**
+**Update on Dec 1st, 2021: ALL BUGS ARE FIXED**
 
 -------------------------------------------------------------------------------------------------------------------
 
@@ -129,9 +142,9 @@ I can see that it is first caused by page fault by the instruction at `0x0000000
 
 Because I add a `printf()` just before the `panic()`, when the first panic occurs, it may ruin the sanity of memory. Therefore, the other outputs are not important.
 
-###### Update on 01/21/2021
+###### Update on Dec 1st, 2021
 
-![image-20211201160327745](cow.assets/image-20211201160327745.png)
+![image-20211201160327745](README.assets/image-20211201160327745.png)
 
 *In the `gdb` window above, I set a break point at `0x000000008000026c` to see what instruction caused the kernel trap to panic.*
 
