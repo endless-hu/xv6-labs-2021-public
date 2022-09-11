@@ -13,11 +13,13 @@
 
 This is my project report for [MIT 6.S081(Operating System), 2021 Fall](https://pdos.csail.mit.edu/6.S081/2021/schedule.html). 
 
-**PLEASE NOTE: The hyperlinks to my source code in this repo are INVALID!!! This is a __public__ version of my project. I don't open my source code because it is a course project and I believe I'm obliged to help protect academic integrity.**
+**PLEASE NOTE: The hyperlinks to my source code in this repo are INVALID!!! This is a _public_ version of my project. I don't open my source code because it is a course project and I believe I'm obliged to help protect academic integrity.**
 
 If you want to verify my code, I think the GitHub Action is enough;
 
-If you want to see my code, please contact me and demonstrate your identity first.
+**If you want to see my code, please contact me at `zj_hu [at] zju.edu.cn` and demonstrate your identity first.**
+
+**Additionally**, I wrote a summery for the course. Please look at [Summery.md](Summery.md) if you are interested.
 
 # Project Overview
 
@@ -36,8 +38,6 @@ To implement following functions:
 - `xargs`: Write a simple version of the UNIX xargs program: read lines from the standard input and run a command for each line, supplying the line as arguments to the command.
 
 ### Relevant Files
-
-**REMINDER: PLEASE SWITCH TO THE CORRECT BRANCH BY: `$ git checkout util`**
 
 ```
 user/sleep.c
@@ -60,8 +60,6 @@ To implement the following two functions in the kernel:
 
 ### Relevant Files
 
-**REMINDER: PLEASE SWITCH TO THE CORRECT BRANCH BY: `$ git checkout syscall`**
-
 ```
 kernel/proc.c
 kernel/syscall.c
@@ -80,15 +78,9 @@ To implement the following three functions in the kernel:
 - `vmprint()`: It should take a `pagetable_t` argument, and print that `pagetable`.
 - `sys_pgaccess()`: return the info of accessed pages to the buffer passed in by user.
 
-### Relevant Files
+### Detailed Report
 
-**REMINDER: PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout pgtbl
-```
-
-**See the report in the branch `pgtbl`**
+[docs/pgtbl.md](docs/pgtbl.md)
 
 ## Lab 4 - Traps
 
@@ -99,15 +91,9 @@ The original requirements can be found [here](https://pdos.csail.mit.edu/6.S081/
 - Implement the `backtrace` function to print out the return addresses of the functions which are called.
 - Implement `sigalarm(int ticks, (void *handler)())` so that it will set an alarm which will set off at the interval of `ticks`. When the alarm set off, the system will call the `handler` function to handle the alarm. Call `sigalarm(0, 0)` to unset the alarm.
 
-### Relevant Files
+### Detailed Report
 
-**REMINDER: PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout traps
-```
-
-**See the report in the branch `traps`**
+[docs/traps.md](docs/traps.md)
 
 ## Lab 5 - Copy-On-Write
 
@@ -127,13 +113,7 @@ COW `fork()` makes freeing of the physical pages that implement user memory a li
 
 ### Detailed Reports
 
-**REMINDER: PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout cow
-```
-
-**See the report in the branch `cow`**
+[docs/cow.md](docs/cow.md)
 
 ## Lab 6 - Multi-Threading
 
@@ -147,17 +127,13 @@ The original requirements can be found [here](https://pdos.csail.mit.edu/6.S081/
 
 ### Detailed Reports
 
-**REMINDER: PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout thread
-```
-
-**See the report in the branch `thread`**
+[docs/thread.md](docs/thread.md)
 
 ## Lab 7 - Networking
 
 The original requirements can be found [here](https://pdos.csail.mit.edu/6.S081/2021/labs/net.html).
+
+**No detailed report provided because the hints in the lab specification are lucid enough.**
 
 ### Task
 
@@ -168,16 +144,6 @@ Your job is to complete `e1000_transmit()` and `e1000_recv()`, both in `kernel/e
 - Every time `e1000_recv()` is called, there could be multiple packages waiting to be read. 
   If not all of these packages are processed, then the program will just sleep forever, while the switcher cannot find any `RUNNABLE` thread to execute.
 - `net_rx()`, which is called in `e1000_recv()`, will finally call `e1000_transmit()`. Since we need to add lock for both `e1000_transmit()` and `e1000_recv()`, it's impossible to just add a lock through out the functions. 
-
-### Code
-
-**PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout net
-```
-
-**No detailed report provided because the hints in the lab specification are lucid enough.**
 
 ## Lab 8 - Lock
 
@@ -190,13 +156,8 @@ The original requirements can be found [here](https://pdos.csail.mit.edu/6.S081/
 
 ### Detailed Report
 
-**PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout lock
-```
-
-**See the report in the branch `lock`**
+Note that there was a bug in the original code. I fixed it.
+Please look at the detailed report at [docs/lock.md](docs/lock.md) for more infomation.
 
 ## Lab 9 - File System
 
@@ -209,13 +170,7 @@ Here is [the original requirement](https://pdos.csail.mit.edu/6.S081/2021/labs/f
 
 ### Detailed Report
 
-**PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout fs
-```
-
-**See the report in the branch `fs`**
+[docs/fs.md](docs/fs.md)
 
 ## Lab 10 - mmap
 
@@ -231,13 +186,7 @@ Implement enough `mmap` and `munmap` functionality, including:
 
 ### Detailed Report
 
-**PLEASE SWITCH TO THE CORRECT BRANCH BY:**
-
-```
-$ git checkout mmap
-```
-
-**See the report in the branch `mmap`**
+[docs/mmap.md](docs/mmap.md)
 
 # Test Results
 
@@ -275,7 +224,7 @@ $ git checkout mmap
 
 **NOTE: THERE ARE SOME BUGS IN THE ORIGINAL CODE. I FIXED IT.**
 
-**IF YOU HAVE QUESTIONS, SEE THE DETAILED REPORT.**
+**IF YOU HAVE QUESTIONS, SEE [THE DETAILED REPORT](docs/lock.md).**
 
 ![image-20211215192940944](README.assets/image-20211215192940944.png)
 
